@@ -1,8 +1,10 @@
 # Hue Stack
 
-An original one-finger color-sorting puzzle with a "drip" pressure twist. Built as a single self-contained `index.html` (HTML + CSS + JS, no external libraries, no network requests), designed for browser game portals (Poki, CrazyGames, itch.io) and future submission to YouTube Playables.
+An original one-finger color-sorting puzzle with a "drip" pressure twist. Built as a single self-contained `public/index.html` (HTML + CSS + JS, no external libraries, no network requests), designed for browser game portals (Poki, CrazyGames, itch.io) and future submission to YouTube Playables.
 
-Play it locally by opening `index.html` in any modern browser, or visit the deployed URL once published.
+Play it locally by opening `public/index.html` in any modern browser, or visit the deployed URL: **https://hue-stack.u10111012.workers.dev**
+
+The game lives in `public/` so that `wrangler deploy` (Cloudflare) only ever uploads that one file — it never publishes this repo's `.git` history or other project files.
 
 ## How to play
 
@@ -10,7 +12,7 @@ Tap a tube to lift its top same-color group, then tap a destination tube to move
 
 ## Tuning: the `CONFIG` object
 
-All game-balance numbers live in one `CONFIG` object at the top of the script in `index.html`. Values were tuned using a standalone Node.js simulation (200 random-play + semi-smart-bot runs) so that the early game is forgiving and a typical run lasts about one to two minutes:
+All game-balance numbers live in one `CONFIG` object at the top of the script in `public/index.html`. Values were tuned using a standalone Node.js simulation (200 random-play + semi-smart-bot runs) so that the early game is forgiving and a typical run lasts about one to two minutes:
 
 | Key | Value | Purpose |
 |---|---|---|
@@ -47,4 +49,10 @@ To make the game easier, raise `START_EMPTY_TUBES`, raise `DRIP_INTERVAL_START/M
 
 ## Deployment
 
-Deployed as a static site via Cloudflare Pages directly from this repository's `main` branch — no build step required.
+Deployed to Cloudflare Workers (static assets) at **https://hue-stack.u10111012.workers.dev**, serving only the `public/` directory — no build step required. To redeploy after a change:
+
+```bash
+npx wrangler deploy
+```
+
+To instead auto-deploy on every push, connect this GitHub repo in the Cloudflare dashboard (Workers & Pages → Create → connect to Git), with build output directory set to `public`.
